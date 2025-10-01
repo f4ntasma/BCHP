@@ -1,0 +1,42 @@
+name: smart_home_bcp
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Paquete de íconos estilo iOS
+  cupertino_icons: ^1.0.8
+
+  # Manejo de estado simple y eficiente
+  provider: ^6.0.5
+
+  # Fuentes personalizadas para darle un look formal
+  google_fonts: ^6.1.0
+
+  # Guardar datos de forma local (ej: último dispositivo Bluetooth conectado)
+  shared_preferences: ^2.2.3
+
+  # Reglas de buenas prácticas recomendadas
+  flutter_lints: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/Logo-bcp-vector.png
+
+dependency_overrides:
+  flutter_bluetooth_serial:
+    git:
+      url: https://github.com/edufolly/flutter_bluetooth_serial.git
+      ref: master
