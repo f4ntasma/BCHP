@@ -24,14 +24,6 @@ class HomeScreen extends StatelessWidget {
               'assets/images/Logo-bcp-vector.png',
               height: 28,
             ),
-            const SizedBox(width: 10),
-            Text(
-              "Bot",
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
           ],
         ),
         centerTitle: false,
