@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'bluetooth_screen.dart';
-import 'energy_screen.dart';
-import 'light_control.dart';
-import 'fan_control.dart';
 import '../services/theme_provider.dart';
+import '../widgets/mascot_foreground.dart'; // 👈 mascota en primer plano
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -32,7 +29,7 @@ class HomeScreen extends StatelessWidget {
               "Bot",
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w600,
-                color: Colors.white, // título en blanco
+                color: Colors.white,
               ),
             ),
           ],
@@ -60,94 +57,83 @@ class HomeScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.bolt),
               title: const Text("Consumo de Energía"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const EnergyScreen()),
-                );
-              },
+              onTap: () => Navigator.pushNamed(context, '/energy'),
             ),
             ListTile(
               leading: const Icon(Icons.brightness_6),
               title: const Text("Cambiar Tema"),
-              onTap: () {
-                themeProvider.toggleTheme();
-              },
+              onTap: themeProvider.toggleTheme,
             ),
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          children: [
-            _buildFeatureCard(
-              context,
-              icon: Icons.bluetooth,
-              title: "Bluetooth",
-              color: Colors.blueAccent,
-              onTap: () {
-                Navigator.push(
+
+      // 👇 Grid de funciones + mascota en primer plano (no bloquea taps)
+      body: Stack(
+        children: [
+          // 1. El fondo, que se dibuja primero (detrás de todo).
+          const MascotBackground(),
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.05,
+              children: [
+                _buildFeatureCard(
                   context,
-                  MaterialPageRoute(builder: (_) => const BluetoothScreen()),
-                );
-              },
-            ),
-            _buildFeatureCard(
-              context,
-              icon: Icons.lightbulb,
-              title: "Luces",
-              color: Colors.amber,
-              onTap: () {
-                Navigator.push(
+                  icon: Icons.bluetooth,
+                  title: "Bluetooth",
+                  color: Colors.blueAccent,
+                  onTap: () => Navigator.pushNamed(context, '/bluetooth'),
+                ),
+                _buildFeatureCard(
                   context,
-                  MaterialPageRoute(builder: (_) => const LightControlScreen()),
-                );
-              },
-            ),
-            _buildFeatureCard(
-              context,
-              icon: Icons.air,
-              title: "Ventilación",
-              color: Colors.teal,
-              onTap: () {
-                Navigator.push(
+                  icon: Icons.lightbulb,
+                  title: "Luces",
+                  color: Colors.amber,
+                  onTap: () => Navigator.pushNamed(context, '/lights'),
+                ),
+                _buildFeatureCard(
                   context,
-                  MaterialPageRoute(builder: (_) => const FanControlScreen()),
-                );
-              },
-            ),
-            _buildFeatureCard(
-              context,
-              icon: Icons.bolt,
-              title: "Energía",
-              color: Colors.redAccent,
-              onTap: () {
-                Navigator.push(
+                  icon: Icons.air,
+                  title: "Ventilación",
+                  color: Colors.teal,
+                  onTap: () => Navigator.pushNamed(context, '/fan'),
+                ),
+                _buildFeatureCard(
                   context,
-                  MaterialPageRoute(builder: (_) => const EnergyScreen()),
-                );
-              },
+                  icon: Icons.bolt,
+                  title: "Energía",
+                  color: Colors.redAccent,
+                  onTap: () => Navigator.pushNamed(context, '/energy'),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          // Mascota completa + burbuja aleatoria (1 por apertura)
+          const MascotForeground(),
+        ],
       ),
     );
   }
 
-  Widget _buildFeatureCard(BuildContext context,
-      {required IconData icon,
-      required String title,
-      required Color color,
-      required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 4,
+  Widget _buildFeatureCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      elevation: 4,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),

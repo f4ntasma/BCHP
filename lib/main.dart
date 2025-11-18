@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'screens/home_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'utils/app_theme.dart';
+import 'utils/transitions.dart'; // fadeThrough(page)
+
+// Providers
 import 'services/theme_provider.dart';
 import 'services/lights_provider.dart';
 import 'services/fan_provider.dart';
 
+// Pantallas
+import 'screens/home_screen.dart';
+import 'screens/bluetooth_screen.dart';
+import 'screens/energy_screen.dart';
+import 'screens/light_control.dart';
+import 'screens/fan_control.dart';
+
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LightsProvider()),
-        ChangeNotifierProvider(create: (_) => FanProvider()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,21 +27,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Smart Home BCP',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LightsProvider()),
+        ChangeNotifierProvider(create: (_) => FanProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (_, theme, __) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Smart Home',
+          theme: buildAppTheme(Brightness.light),
+          darkTheme: buildAppTheme(Brightness.dark),
+          themeMode: theme.themeMode, // o: theme.isDark ? ThemeMode.dark : ThemeMode.light
+          onGenerateRoute: _onGenerateRoute,
+          initialRoute: '/', // 👈 sin splash
+        ),
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blueGrey,
-      ),
-      themeMode: themeProvider.themeMode,
-      home: const HomeScreen(),
     );
+  }
+}
+
+Route<dynamic> _onGenerateRoute(RouteSettings s) {
+  switch (s.name) {
+    case '/':
+      return fadeThrough(const HomeScreen());
+    case '/bluetooth':
+      return fadeThrough(const BluetoothScreen());
+    case '/energy':
+      return fadeThrough(const EnergyScreen());
+    case '/lights':
+      return fadeThrough(const LightControlScreen());
+    case '/fan':
+      return fadeThrough(const FanControlScreen());
+    default:
+      return fadeThrough(const HomeScreen());
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class FanProvider extends ChangeNotifier {
@@ -5,6 +6,13 @@ class FanProvider extends ChangeNotifier {
   double speed = 50;
   double targetTemp = 24;
   double currentTemp = 26; // Simulado, más adelante puede venir de un sensor
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   void toggleFan(bool value) {
     fanOn = value;
@@ -18,6 +26,17 @@ class FanProvider extends ChangeNotifier {
 
   void setTargetTemp(double val) {
     targetTemp = val;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if ((targetTemp - currentTemp).abs() < 0.1) {
+        timer.cancel();
+      } else if (currentTemp < targetTemp) {
+        currentTemp += 0.1;
+      } else {
+        currentTemp -= 0.1;
+      }
+      notifyListeners();
+    });
     notifyListeners();
   }
 
