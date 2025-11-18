@@ -29,11 +29,7 @@ class _MascotForegroundState extends State<MascotForeground>
   @override
   void initState() {
     super.initState();
-
-    // Mensaje aleatorio (uno por apertura)
     _message = (_messages.toList()..shuffle()).first;
-
-    // Animación de aparición (fade + scale + slide up)
     _appear = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 520),
@@ -55,7 +51,6 @@ class _MascotForegroundState extends State<MascotForeground>
 
   @override
   Widget build(BuildContext context) {
-    // IgnorePointer evita que la mascota o la burbuja bloqueen los toques a los botones.
     return IgnorePointer(
       child: LayoutBuilder(
         builder: (context, c) {
@@ -70,7 +65,6 @@ class _MascotForegroundState extends State<MascotForeground>
 
           return Stack(
             children: [
-              // Mascota: solo animación de aparición, luego quieta
               AnimatedBuilder(
                 animation: _appear,
                 builder: (_, __) {
@@ -95,7 +89,6 @@ class _MascotForegroundState extends State<MascotForeground>
                 },
               ),
 
-              // Burbuja: aparece con la mascota
               Positioned(
                 left: bubbleLeft,
                 bottom: bubbleBottom,
@@ -124,8 +117,6 @@ class _MascotForegroundState extends State<MascotForeground>
   }
 }
 
-/// --- WIDGET SEPARADO PARA EL FONDO ---
-/// Coloca este widget como el PRIMER hijo en tu Stack de la pantalla principal.
 class MascotBackground extends StatelessWidget {
   const MascotBackground({super.key});
 
@@ -200,7 +191,6 @@ class _SpeechBubble extends StatelessWidget {
                 ),
           ),
         ),
-        // Cola de la burbuja
         const Positioned(
           left: 18,
           bottom: -8,

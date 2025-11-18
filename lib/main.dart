@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
           title: 'Smart Home',
           theme: buildAppTheme(Brightness.light),
           darkTheme: buildAppTheme(Brightness.dark),
-          themeMode: theme.themeMode, // o: theme.isDark ? ThemeMode.dark : ThemeMode.light
+          themeMode: theme.themeMode, 
           onGenerateRoute: _onGenerateRoute,
-          initialRoute: '/', // 👈 sin splash
+          initialRoute: '/', 
         ),
       ),
     );

@@ -36,7 +36,6 @@ class ControlCenterSliderHorizontal extends StatelessWidget {
         child: Stack(
           alignment: Alignment.centerLeft,
           children: [
-            // Barra animada de progreso
             AnimatedFractionallySizedBox(
               widthFactor: value,
               duration: duration,
@@ -50,7 +49,6 @@ class ControlCenterSliderHorizontal extends StatelessWidget {
                 ),
               ),
             ),
-            // Ícono fijo a la izquierda
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Icon(icon, color: Colors.white, size: 28),

@@ -54,12 +54,11 @@ class _EnergyScreenState extends State<EnergyScreen> {
       'esFinDeSemana': 0.0,
       'esVerano': 0.0,
       'esInvierno': 1.0, 
-      'horaPico': 0.0, // ¡Importante! Siempre 0.0
+      'horaPico': 0.0, 
       'diaSemana': 2.0,
       'mes': 10.0,
     };
 
-    // 6. Ejecuta la predicción
     double prediction = _predictionService.predictConsumption(
       clientes: simulacion['clientes']!,
       cajerosOperando: simulacion['cajerosOperando']!,
@@ -75,16 +74,14 @@ class _EnergyScreenState extends State<EnergyScreen> {
     );
 
     // 7. Actualiza la UI con el resultado
-    if (mounted) { // Buena práctica: verifica que el widget aún exista
+    if (mounted) { 
       setState(() {
-        // Calcula el ahorro comparando con el mes anterior (Septiembre, índice 8)
         final previousMonthConsumption = _monthlyConsumption[8];
         if (previousMonthConsumption > 0) {
           _savings = previousMonthConsumption - prediction;
         }
 
         _predictedConsumption = prediction;
-        // Actualizamos el mes actual (Octubre, índice 9) con la predicción
         _monthlyConsumption[9] = prediction;
         _isLoading = false;
         _loadingMessage = "Predicción lista";
@@ -94,10 +91,8 @@ class _EnergyScreenState extends State<EnergyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 8. TU UI AHORA ES CONDICIONAL
     return Scaffold(
       appBar: AppBar(
-        // Tu AppBar (sin cambios)
         backgroundColor: const Color(0xFF003366),
         title: Text(
           "Consumo de Energía",
@@ -105,10 +100,8 @@ class _EnergyScreenState extends State<EnergyScreen> {
         ),
         centerTitle: true,
       ),
-      // Muestra un indicador de carga o el contenido
       body: _isLoading
           ? Center(
-              // UI de Carga
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -116,15 +109,14 @@ class _EnergyScreenState extends State<EnergyScreen> {
                   const SizedBox(height: 16),
                   Text(
                     _loadingMessage,
-                    style: GoogleFonts.poppins(), // Usamos tu fuente
+                    style: GoogleFonts.poppins(), 
                   ),
                 ],
               ),
             )
           : Padding(
-              // Tu UI de Contenido (con datos reales)
               padding: const EdgeInsets.all(20),
-              child: ListView( // Usamos ListView para evitar overflow si el contenido crece
+              child: ListView( 
                 children: [
                   Text(
                     "Gráfico mensual de consumo",
@@ -134,11 +126,10 @@ class _EnergyScreenState extends State<EnergyScreen> {
                   const SizedBox(height: 20),
                   SizedBox(
                     height: 200,
-                    child: _buildMonthlyChart(), // <-- AQUÍ VA EL GRÁFICO
+                    child: _buildMonthlyChart(),
                   ),
                   const SizedBox(height: 24),
                   
-                  // 9. REEMPLAZA EL TEXTO ESTÁTICO CON LA PREDICCIÓN
                   Text(
                     "Predicción de Consumo (Simulado):",
                     style: GoogleFonts.poppins(

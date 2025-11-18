@@ -17,15 +17,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   BluetoothDevice? connectedDevice;
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
-  bool isLoading = true;           // carga inicial
-  bool _isDiscovering = false;     // en proceso
-  String? _connectingAddr;         // spinner por ítem al conectar
+  bool isLoading = true;          
+  bool _isDiscovering = false;     
+  String? _connectingAddr;        
   StreamSubscription<BluetoothDiscoveryResult>? _discoverySub;
 
   @override
   void initState() {
     super.initState();
-    // Escucha cambios en el estado del Bluetooth (encendido/apagado)
     FlutterBluetoothSerial.instance.onStateChanged().listen((BluetoothState state) {
       setState(() {
         _bluetoothState = state;
@@ -41,15 +40,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     super.dispose();
   }
 
-  // --- NUEVO: Helper para solicitar permisos ---
   Future<bool> _requestPermissions() async {
-    // Cuando pides varios permisos, obtienes un mapa de resultados.
     Map<Permission, PermissionStatus> statuses = await [
       Permission.bluetoothScan,
       Permission.bluetoothConnect,
     ].request();
 
-    // Verificamos que AMBOS permisos hayan sido concedidos.
     return statuses[Permission.bluetoothScan]!.isGranted && statuses[Permission.bluetoothConnect]!.isGranted;
   }
 
@@ -70,30 +66,22 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       setState(() => isLoading = false);
     }
   }
-
-  // Buscar dispositivos cercanos (sin abrir conexión SPP)
   Future<void> _toggleDiscovery() async {
     if (_isDiscovering) {
       await _discoverySub?.cancel();
       setState(() => _isDiscovering = false);
       return;
     }
-
-    // --- NUEVO: Verificación de estado y permisos ---
-    // 1. Comprueba si el Bluetooth está encendido
     final btState = await FlutterBluetoothSerial.instance.state;
     if (btState == BluetoothState.STATE_OFF) {
       await FlutterBluetoothSerial.instance.requestEnable();
-      return; // Espera a que el usuario lo active, el listener de estado actualizará la UI
+      return;
     }
-
-    // 2. Comprueba si tenemos permisos
     if (!await _requestPermissions()) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Se requieren permisos de Bluetooth para buscar dispositivos.')));
       return;
     }
     setState(() => _isDiscovering = true);
-    // mantenemos los emparejados y vamos agregando nuevos si aparecen
     _discoverySub =
         FlutterBluetoothSerial.instance.startDiscovery().listen((result) {
       final d = result.device;
@@ -135,10 +123,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   Future<void> _connectToDevice(BluetoothDevice device,
       {bool auto = false}) async {
-    // solo mostramos spinner y “guardamos” como conectado (tal como hacías),
-    // sin abrir socket SPP
     setState(() => _connectingAddr = device.address);
-    // detén búsqueda para evitar estados raros
     if (_isDiscovering) {
       await _discoverySub?.cancel();
       setState(() => _isDiscovering = false);

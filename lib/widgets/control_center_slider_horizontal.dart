@@ -60,7 +60,6 @@ class _ControlCenterSliderHorizontalState
       enabled: widget.enabled,
       child: Row(
         children: [
-          // Ícono FUERA de la barra (no roba ancho a la barra)
           Container(
             width: h,
             height: h,
@@ -77,7 +76,6 @@ class _ControlCenterSliderHorizontalState
           ),
           const SizedBox(width: 12),
 
-          // Barra que ocupa todo el espacio restante
           Expanded(
             child: _TrackBar(
               value: v,
@@ -90,7 +88,7 @@ class _ControlCenterSliderHorizontalState
                 setState(() => _dragging = isDragging);
               },
               onHaptic: (newV) {
-                // Háptico cada 10% mientras arrastras
+              
                 final step = (newV * 10).floorToDouble();
                 if (step != _lastHapticStep && _dragging && widget.enabled) {
                   HapticFeedback.selectionClick();
@@ -106,7 +104,7 @@ class _ControlCenterSliderHorizontalState
 }
 
 class _TrackBar extends StatelessWidget {
-  final double value; // 0..1
+  final double value; 
   final ValueChanged<double> onChanged;
   final Gradient gradient;
   final double height;
@@ -126,7 +124,6 @@ class _TrackBar extends StatelessWidget {
     required this.onHaptic,
   });
 
-  // Asegura gradiente horizontal si es LinearGradient y opacidad si está deshabilitado
   Gradient _horizontalize(Gradient g, {required bool enabled}) {
     List<Color> mapColors(List<Color> colors) =>
         colors.map((c) => enabled ? c : c.withOpacity(0.5)).toList();
@@ -206,7 +203,7 @@ class _TrackBar extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  // RELLENO con gradiente y ancho exacto (¡aquí vive el color!)
+                  
                   Positioned(
                     left: 0,
                     top: 0,
@@ -220,7 +217,6 @@ class _TrackBar extends StatelessWidget {
                     ),
                   ),
 
-                  // Highlight sutil al arrastrar
                   if (dragging)
                     Positioned.fill(
                       child: IgnorePointer(

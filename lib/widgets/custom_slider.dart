@@ -30,7 +30,7 @@ class CustomSlider extends StatelessWidget {
         const SizedBox(height: 8),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            trackHeight: 12, // altura de la barra
+            trackHeight: 12,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 14),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
             activeTrackColor: color,
