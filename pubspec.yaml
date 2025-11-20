@@ -35,6 +35,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   # Reglas de código (va en dev_dependencies)
   flutter_lints: ^5.0.0
 
@@ -47,3 +48,8 @@ flutter:
 
     # Registramos el modelo
     - assets/modelo_ahorro.tflite
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon_bcp.png"
