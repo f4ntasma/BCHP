@@ -14,6 +14,7 @@ class _MascotForegroundState extends State<MascotForeground>
   late final Animation<double> _opacity;
   late final Animation<double> _scale;
   late final Animation<double> _translateY;
+  late final AnimationController _float;
 
   bool _showBubble = true;
   late final String _message;
@@ -38,6 +39,10 @@ class _MascotForegroundState extends State<MascotForeground>
     _opacity    = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
     _scale      = Tween<double>(begin: 0.92, end: 1.0).animate(curve);
     _translateY = Tween<double>(begin: 40.0, end: 0.0).animate(curve);
+    _float = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 8),
+    )..repeat();
 
     _appear.forward();
 
@@ -46,6 +51,7 @@ class _MascotForegroundState extends State<MascotForeground>
   @override
   void dispose() {
     _appear.dispose();
+    _float.dispose();
     super.dispose();
   }
 
@@ -76,11 +82,17 @@ class _MascotForegroundState extends State<MascotForeground>
                         offset: Offset(0, _translateY.value),
                         child: Transform.scale(
                           scale: _scale.value,
-                          child: Image.asset(
-                            'assets/images/bcp-pet.png',
-                            width: imgW,
-                            fit: BoxFit.contain,
-                            filterQuality: FilterQuality.high,
+                          child: Transform.translate(
+                            offset: Offset(
+                              math.sin(_float.value * 2 * math.pi) * 12,
+                              0,
+                            ),
+                            child: Image.asset(
+                              'assets/images/bcp-pet.png',
+                              width: imgW,
+                              fit: BoxFit.contain,
+                              filterQuality: FilterQuality.high,
+                            ),
                           ),
                         ),
                       ),

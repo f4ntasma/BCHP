@@ -16,6 +16,7 @@ import 'screens/bluetooth_screen.dart';
 import 'screens/energy_screen.dart';
 import 'screens/light_control.dart';
 import 'screens/fan_control.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
           darkTheme: buildAppTheme(Brightness.dark),
           themeMode: theme.themeMode, 
           onGenerateRoute: _onGenerateRoute,
-          initialRoute: '/', 
+          initialRoute: '/splash', 
         ),
       ),
     );
@@ -50,6 +51,8 @@ class MyApp extends StatelessWidget {
 
 Route<dynamic> _onGenerateRoute(RouteSettings s) {
   switch (s.name) {
+    case '/splash':
+      return fadeThrough(const SplashScreen());
     case '/':
       return fadeThrough(const HomeScreen());
     case '/bluetooth':
