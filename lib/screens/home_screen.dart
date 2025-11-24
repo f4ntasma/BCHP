@@ -20,9 +20,27 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF003366),
         title: Row(
           children: [
-            Image.asset(
-              'assets/images/Logo-bcp-vector.png',
-              height: 28,
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF003366),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  'assets/images/Logo-bcp-vector.png',
+                  height: 44,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
           ],
         ),
@@ -35,9 +53,20 @@ class HomeScreen extends StatelessWidget {
             DrawerHeader(
               decoration: const BoxDecoration(color: Color(0xFF003366)),
               child: Center(
-                child: Image.asset(
-                  'assets/images/Logo-bcp-vector.png',
-                  height: 45,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF003366),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.asset(
+                      'assets/images/Logo-bcp-vector.png',
+                      height: 76,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
             ),
